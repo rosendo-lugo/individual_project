@@ -151,6 +151,13 @@ def prep_data(df):
     
     # strips the leading and trailing spaces from the column names
     df.columns = df.columns.str.strip()
+    
+    # Define quartiles
+    Q1 = df['total_assets'].quantile(0.25)
+    Q3 = df['total_assets'].quantile(0.75)
+
+    # Create a new variable 'total_assets_size'
+    df['total_assets_size'] = ['low_assets' if x < Q1 else 'high_assets' if x >= Q3 else 'medium_assets' for x in df['total_assets']]
 
     return df
 
@@ -334,7 +341,7 @@ def get_split(df):
     random state = 123
     '''  
     # dropping these columns as they are not needed for X_train
-    df = df.drop(columns =['company_name', 'year'])
+    # df = df.drop(columns =['company_name', 'year'])
     
     # split your dataset
     train_validate, ts = train_test_split(df, test_size=.2, random_state=123)
@@ -351,13 +358,13 @@ def get_Xs_ys_to_scale_baseline(tr, val, ts, target):
     '''
                            
     # Separate the features (X) and target variable (y) for the training set
-    X_tr, y_tr = tr.drop(columns=[target]), tr[target]
+    X_tr, y_tr = tr.drop(columns=[target,'company_name', 'year', 'total_assets_size']), tr[target]
     
     # Separate the features (X) and target variable (y) for the validation set
-    X_val, y_val = val.drop(columns=[target]), val[target]
+    X_val, y_val = val.drop(columns=[target,'company_name', 'year', 'total_assets_size']), val[target]
     
     # Separate the features (X) and target variable (y) for the test set
-    X_ts, y_ts = ts.drop(columns=[target]), ts[target]
+    X_ts, y_ts = ts.drop(columns=[target,'company_name', 'year', 'total_assets_size']), ts[target]
     
     # Get the list of columns to be scaled
     to_scale = X_tr.columns.tolist()
