@@ -142,12 +142,15 @@ def prep_data(df):
     df = df.rename(columns={'x1':'current_assets', 'x2':'cost_of_goods_sold',
                          'x3':'depreciation_and_amortization','x4':'ebitda',
                          'x5':'inventory','x6':'net_income',
-                         'x7':'total_receivables','x8':'market_value ',
+                         'x7':'total_receivables','x8':'market_value',
                          'x9':'net_sales', 'x10':'total_assets',
                          'x11':'total_long_term_debt','x12':'ebit',
                          'x13':'gross_profit','x14':'total_current_liabilities',
-                         'x15':'retained_earnings','x16':'total_revenue ',
-                         'x17':'total_liabilities ','x18':'total_operating_expenses'})
+                         'x15':'retained_earnings','x16':'total_revenue',
+                         'x17':'total_liabilities','x18':'total_operating_expenses'})
+    
+    # strips the leading and trailing spaces from the column names
+    df.columns = df.columns.str.strip()
 
     return df
 
